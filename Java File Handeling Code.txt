@@ -1,0 +1,820 @@
+/*
+Code By: Mr. Pawar Shrikant Sanjeev
+Student Of KK Wagh College Of Engineering , Nashik,Maharashtra.
+Branch : Information Technology
+Mail Id:  pawarshri2002.sp@gmail.com
+*/
+
+package file_Handeling;
+import java.util.LinkedList;
+import java.util.Scanner;
+
+import java.io.*;
+
+class Student 
+{
+	LinkedList<String> ll=new LinkedList<String>();
+
+	 int i=0;
+Scanner Sc=new Scanner(System.in);
+    static String Filepath="C:\\JavaFiles";
+	String age,Student_Id,Rno;
+    int Count=0,flag1;
+    String gender,Cname,Address,name;
+    static String Fname;
+    String marks;
+    File f=new File("");
+    BufferedReader Br; 
+    PrintWriter Fw;
+    void SetPath()
+    {
+    	System.out.println("Enter Path Address");
+    	String temp=Sc.next();
+    	Filepath=temp.concat("\\");
+    }
+    
+    void Create() throws IOException
+    {
+   
+	System.out.println("Enter The File Name Which Do You Want To Set");
+	Fname=Sc.nextLine();
+	f=new File(Filepath.concat("\\").concat(Fname.concat(".txt")));
+	if(!f.exists())
+	{
+	f.createNewFile();
+	System.out.println(Fname.concat(".txt")+"	File Created Successfully");
+	}
+	else
+	{
+		String s="";
+		System.out.println(Fname.concat(".txt")+"	File Already Exists");
+		System.out.println("So we are auto renameing it");	
+    	while (f.exists())
+    	{
+    		i++;
+    		s=String.valueOf(i);
+    		f=new File(Filepath.concat("\\").concat(Fname.concat("(").concat(s).concat(")").concat(".txt")));
+    		
+    	}
+    	
+    	Fname=Fname.concat("(").concat(s).concat(")");
+		System.out.println("New File Name is : "+Fname.concat(".txt"));
+	
+		f.createNewFile();
+		i=0;
+	
+	}
+	Count=1;
+	ll.add(Fname);
+	}
+    void check()
+    {
+    	if (Count==1)
+    	{
+    	if (f.exists())
+    	{
+    		System.out.println(Fname.concat(".txt")+"	File Exists");
+    	}
+    	else
+    	{
+    		System.out.println("File Does Not Exist");
+    	}
+    	}
+    	else
+    	{
+    		System.out.println("As You Not Created File Yet, You Are Not Allowed To Check Whether File Exist Or Not");
+    	}
+    }
+    void PrintFile() throws IOException
+	{
+    	if (f.exists())
+    	{
+    	
+    	Br=new BufferedReader(new FileReader(Filepath.concat("\\").concat(Fname.concat(".txt"))));
+		String Line=Br.readLine();
+		if (Line==null)
+		{
+			System.out.println("File Is Empty");
+		}
+		while(Line!=null)
+		{
+			System.out.println(Line);
+			Line=Br.readLine();			
+		}
+		Br.close();
+    	}
+    	else
+    	{
+    		System.out.println("File Does Not Exist");
+    	}
+	}
+    void deleteperticular() throws IOException
+    {
+    	String temp,file="";
+    	int count=0;
+    	int ch;
+    	String backup;
+    	System.out.println("Enter The File Name Which Do You Want To Delete nd that exist");
+    	temp=Sc.next();
+    	File f2=new File(Filepath.concat("\\").concat(temp.concat(".txt")));
+    	if(f2.exists())
+    	{
+    		System.out.println("Enter 1 if you want Backup File");
+    		ch=Sc.nextInt();
+    		count=0;
+    		if (ch==1)
+    		{
+    			  if (count==0)
+                  {
+                  	for( int i=0;i<ll.size();i++)
+                  	{
+                  		file=ll.get(i);
+                  		if (file.compareTo(temp)==1)
+                  		{
+                  			count=1;
+                  			System.out.println(temp.concat(".txt") +"  File Is Deleted");
+                  			ll.remove(i-1);
+                  			
+                  			break;
+                  			
+                  		}
+                  	}
+                  }
+                  
+    			if(count==1)
+    			{
+    				System.out.println("Enter Name Of Backup File");
+        			backup=Sc.next();
+        			File copy=new File(Filepath.concat("\\").concat(backup.concat(".txt")));
+            		copy.createNewFile();
+            		PrintWriter p=new PrintWriter(Filepath.concat("\\").concat(backup.concat(".txt")));
+            		BufferedReader B=new BufferedReader(new FileReader(Filepath.concat("\\").concat(temp.concat(".txt"))));
+            		String Line=B.readLine();
+            		while(Line!=null)
+            		{
+            			p.println(Line);
+            			Line=B.readLine();			
+            		}
+            		p.flush();
+            		B.close();
+            		p.close(); 
+        			f2.delete();
+        			System.out.println("Backup File "+backup.concat(".txt")+"  Created Successfully");
+        	        System.out.println(temp.concat(".txt") +"  File Is Deleted");
+    			}
+    			if(count==0)
+                {
+                	System.out.println("The File Name Which You gave is exists but as you not created that file so we can't allow you to delete that file");
+                }
+    		}
+    		else
+    		{
+    			   if (count==0)
+                   {
+                   	for(int i=0;i<ll.size();i++)
+                   	{
+                   		file=ll.get(i);
+                   		if (file.compareTo(temp)==1)
+                   		{
+                   			f2.delete();
+                   			count=1;
+                   			System.out.println(temp+".txt "+"File Is Deleted");
+                   			ll.remove(i-1);
+                   			break;
+                   		}
+                   	}
+                   }
+                   if(count==0)
+                   {
+                   	System.out.println("The File Name Which You gave is exists but as you not created that file so we can't allow you to delete that file");
+                   }
+    		}
+             
+    	}
+    	else
+    	{
+    		System.out.println("Sorry !!!\nFile Not Found");
+    	}
+    	
+    }
+    void delete() throws IOException
+    {
+    	if (f.exists())
+    	{
+    	System.out.println("Do You Want To Take Backup? If yes then Enter 1, Else enter Any Number");
+    	int t=Sc.nextInt();
+    	if (t==1)
+    	{
+    		System.out.println("Enter The name OF the Backup File");
+    		String temp=Sc.next();
+    		File copy=new File(Filepath.concat("\\").concat(temp.concat(".txt")));
+    		copy.createNewFile();
+    		PrintWriter p=new PrintWriter(Filepath.concat("\\").concat(temp.concat(".txt")));
+    		BufferedReader B=new BufferedReader(new FileReader(Filepath.concat("\\").concat(Fname.concat(".txt"))));
+    		String Line=B.readLine();
+    		while(Line!=null)
+    		{
+    			p.println(Line);
+    			Line=B.readLine();			
+    		}
+    		p.flush();
+    		B.close();
+    		p.close();   	
+    		f.delete();
+    		
+                System.out.println("Backup File "+temp.concat(".txt")+"     Created Successfully");
+    		System.out.println(Fname.concat(".txt") +"  File Is Deleted");
+    		Fname=null;
+    	}
+    	else
+    	{
+    	System.out.println("Enter 1 To Delete File");
+    	int temp=Sc.nextInt();
+    	if (temp==1)
+    	{
+    		
+    		f.delete();
+    		System.out.println(Fname.concat(".txt") +"  File Is Deleted");
+    		Fname=null;
+    	}
+    	else
+    	{
+    		System.out.println(Fname.concat(".txt") +"  File Is Not Deleted");
+    	}
+    	}
+    	}
+    	else
+    	{
+    		System.out.println("File not Found For Deletion Process");
+    	}
+    }
+    void EnterData() throws IOException
+    {
+    	if (f.exists())
+    	{
+    		System.out.println("Enter 1 If You Want To Append Your data With Previous data");
+    		int temp=Sc.nextInt();
+    		if (temp==1)
+    		{
+    		  FileWriter fw = new FileWriter(Filepath.concat("\\").concat(Fname.concat(".txt")),true);
+          	  BufferedWriter bw = new BufferedWriter(fw);
+          	   Fw=new PrintWriter(bw);
+    		}
+    		else
+    		{
+    		 Fw=new PrintWriter(Filepath.concat("\\").concat(Fname.concat(".txt")));
+    		}
+    	  	  
+    	       System.out.println("Enter The Name Of the Student");
+    	       name=Sc.next();
+    	       Fw.println("\n"+name);
+    	       System.out.println("Enter Age of the Student");
+    	       age=Sc.next();
+    	       Fw.println(age);
+    	       System.out.println("Enter Student Id Of the Student");
+    	       Student_Id=Sc.next();
+    	       Fw.println(Student_Id);
+    	       System.out.println("Enter Marks OF the Student");
+    	       marks=Sc.next();
+    	       Fw.println(marks);
+    	       System.out.println("Enter Roll No Of Student");
+    	       Rno=Sc.next();
+    	       Fw.println(Rno);
+    	       System.out.println("Enter Gender Of Student");
+    	       gender=Sc.next();
+    	       Fw.println(gender);
+    	       System.out.println("Enter Class Name OF the Student");
+    	       Cname=Sc.next();
+    	       Fw.println(Cname);
+    	       System.out.println("Enter Address Of Student ");
+    	       Address=Sc.next();
+    	       Fw.println(Address);
+    	       Fw.flush();
+    	       Fw.close();
+    	       flag1=1;
+    	}
+    	else
+    	{
+    		System.out.println("File Not Found !!");
+    	}
+    }
+    void update() throws FileNotFoundException
+    {
+    	if (flag1==1)
+    	{
+    		if (f.exists())
+    		{
+    	PrintWriter Fw=new PrintWriter(Filepath.concat("\\").concat(Fname.concat(".txt")));
+            System.out.println("Enter The Name Of the Student");
+            name=Sc.next(); 
+            Fw.println(name);
+            System.out.println("Enter Age of the Student");
+            age=Sc.next();
+            Fw.println(age);
+            System.out.println("Enter Student Id Of the Student");
+            Student_Id=Sc.next();
+            Fw.println(Student_Id);
+            System.out.println("Enter Marks OF the Student");
+            marks=Sc.next();
+            Fw.println(marks);
+            System.out.println("Enter Roll No Of Student");
+            Rno=Sc.next();
+            Fw.println(Rno);
+            System.out.println("Enter Gender Of Student");
+            gender=Sc.next();
+            Fw.println(gender);
+            System.out.println("Enter Class Name OF the Student");
+            Cname=Sc.next();
+            Fw.println(Cname);
+            System.out.println("Enter Address Of Student ");
+            Address=Sc.next();
+            Fw.println(Address);
+            System.out.println("Data Updated Successfully");
+            Fw.flush();
+            Fw.close();
+    		}
+    		else
+    		{
+    		System.out.println("File Does Not Exist");
+    		}
+    	}
+    	else
+    		{
+        		System.out.println("You Have Not Entered Data Yet . Visit The Enter Data Section First");
+        	}
+  		
+    }
+    
+    void OpenAnotherFile() throws IOException
+    {
+    	String Filepath;
+    	System.out.println("Enter Filepath Of the file which do you want to open");
+    	Filepath=Sc.next();
+    	System.out.println("Enter Name Of File Which Do You Want to Open");
+    	String te=Sc.next();
+    	
+    	File f1=new File(Filepath.concat("\\").concat(te.concat(".txt")));
+
+    	if (f1.exists())
+    	{
+        	Br=new BufferedReader(new FileReader(Filepath.concat("\\").concat(te.concat(".txt"))));
+    		String Line=Br.readLine();
+    		if (Line==null)
+    		{
+    			System.out.println("File Is Empty");
+    		}
+    		while(Line!=null)
+    		{
+    			System.out.println(Line);
+    			Line=Br.readLine();			
+    		}
+    	}
+    	else
+    	{
+    		System.out.println("File Does Not Exist");
+    	}
+	
+		Br.close();
+    }
+    void search() throws IOException
+    {
+    	if (f.exists())
+    	{
+    	int flag=0;
+    	int t=0;
+    	System.out.println("Enter The Data Do You Want To Search");
+    	String temp=Sc.next();
+      	Br=new BufferedReader(new FileReader(Filepath.concat("\\").concat(Fname.concat(".txt"))));
+    		String Line=Br.readLine();
+    		while(Line!=null&&flag==0)
+    		{
+    			if (temp.equalsIgnoreCase(Line))
+    			{
+    			System.out.println("Data Found");
+    			flag=1;
+    			t=1;
+    			
+    			break;
+    			}
+    			Line=Br.readLine();			
+    		}
+    		if (t==0)
+			{
+				System.out.println("Data Not Found");
+				
+			}
+    		Br.close();
+    	}
+    	else 
+    	{
+    		System.out.println("File Not Found  !!");
+    	}
+    }
+    void linkedList()
+    {
+    	for(int i=0;i<ll.size();i++)
+    	{
+    		System.out.println(ll.get(i).concat(".txt"));
+    	}
+    }
+    void copy() throws IOException
+    {
+    	int j=0;
+    	String dname="",dpath="",path,oname;
+    	System.out.println("Enter The Path of Original File");
+    	path=Sc.next();
+    	System.out.println("Enter The Name Of The Original File ");
+    	oname=Sc.next();
+    	File f2=new File(path.concat("\\").concat(oname.concat(".txt")));
+    	
+    	if (f2.exists())
+    	{
+    		System.out.println("Enter The Path Of duplicete File ");
+    		dpath=Sc.next();
+    		
+    			System.out.println("Enter The Name Of The Duplicate File");
+        		 dname=Sc.next();
+        		 File fd=new File(dpath.concat("\\").concat(dname.concat(".txt")));
+        		if (fd.exists())
+        		{
+        			String s="";
+        			System.out.println(dname.concat(".txt")+"	File Already Exists");
+        			System.out.println("So we are auto renameing it");	
+        	    	while (fd.exists())
+        	    	{
+        	    		j++;
+        	    		s=String.valueOf(j);
+        	    		fd=new File(dpath.concat("\\").concat(dname.concat("(").concat(s).concat(")").concat(".txt")));
+        	    		
+        	    	}
+        	    	
+        	    	dname=dname.concat("(").concat(s).concat(")");
+        			System.out.println("New File Name is : "+dname.concat(".txt"));
+        		
+        			fd.createNewFile();
+        			i=0;
+        		}
+        		else 
+        		{
+            		fd=new File(dpath.concat("\\").concat(dname.concat(".txt")));
+            		fd.createNewFile();
+        		}      		
+
+
+    		PrintWriter pc=new PrintWriter(dpath.concat("\\").concat(dname.concat(".txt")));
+    		BufferedReader Bc=new BufferedReader(new FileReader(path.concat("\\").concat(oname.concat(".txt"))));
+    		String line=Bc.readLine();
+    		
+    		while(line!=null)
+    		{
+    			pc.println(line);
+    			line=Bc.readLine();
+    		}
+    		System.out.println("File Copied Successfully\nName of Duplicate File :"+dname.concat(".txt") );
+    		pc.close();
+    		Bc.close();
+    	}
+    	else
+    	{
+    		System.out.println("Sorry The File Name with path you have provided to us does not Exist. Please Check Carefully.");
+    	}
+    }
+    void move () throws IOException
+    {
+    	int j=0;
+    	String dpath="",path,oname;
+    	System.out.println("Enter The Path of Original File");
+    	path=Sc.next();
+    	System.out.println("Enter The Name Of The Original File ");
+    	oname=Sc.next();
+    	File f2=new File(path.concat("\\").concat(oname.concat(".txt")));
+    	
+    	if (f2.exists())
+    	{
+    		System.out.println("Enter The Path Of New File ");
+    		dpath=Sc.next();
+    		
+        		 File fd=new File(dpath.concat("\\").concat(oname.concat(".txt")));
+        		if (fd.exists())
+        		{
+        			String s="";
+        			System.out.println(oname.concat(".txt")+"	File Already Exists");
+        			System.out.println("So we are auto renameing it");	
+        	    	while (fd.exists())
+        	    	{
+        	    		j++;
+        	    		s=String.valueOf(j);
+        	    		fd=new File(dpath.concat("\\").concat(oname.concat("(").concat(s).concat(")").concat(".txt")));
+        	    		
+        	    	}
+        	    	
+        	    	oname=oname.concat("(").concat(s).concat(")");
+        			System.out.println("New File Name is : "+oname.concat(".txt"));
+        		
+        			fd.createNewFile();
+        			j=0;
+        		}
+        		else 
+        		{
+            		fd=new File(dpath.concat("\\").concat(oname.concat(".txt")));
+            		fd.createNewFile();
+        		}      		
+
+
+    		PrintWriter pc=new PrintWriter(dpath.concat("\\").concat(oname.concat(".txt")));
+    		BufferedReader Bc=new BufferedReader(new FileReader(path.concat("\\").concat(oname.concat(".txt"))));
+    		String line=Bc.readLine();
+    		
+    		while(line!=null)
+    		{
+    			pc.println(line);
+    			line=Bc.readLine();
+    		}
+    		System.out.println("File Moved  Successfully\nName of new File :"+oname.concat(".txt") );
+    		pc.close();
+    		Bc.close();
+    		f2.delete();
+    	}
+    	else
+    	{
+    		System.out.println("Sorry The File Name with path you have provided to us does not Exist. Please Check Carefully.");
+    	}
+    }
+    void rename() throws IOException
+    {
+    	int j=0;
+	String path,oname,dname;
+	System.out.println("Enter The Path of File");
+	path=Sc.next();
+	System.out.println("Enter The Name Of The Original File ");
+	oname=Sc.next();
+	File f2=new File(path.concat("\\").concat(oname.concat(".txt")));
+	
+	if (f2.exists())
+	{
+		System.out.println("Enter The New Name of that File ");
+		dname=Sc.next();
+		
+				File fd=new File(path.concat("\\").concat(dname.concat(".txt")));
+				if (fd.exists())
+				{
+					String s="";
+	    			System.out.println(dname.concat(".txt")+"	File Already Exists");
+	    			System.out.println("So we are auto renameing it");	
+	    	    	while (fd.exists())
+	    	    	{
+	    	    		j++;
+	    	    		s=String.valueOf(j);
+	    	    		fd=new File(path.concat("\\").concat(dname.concat("(").concat(s).concat(")").concat(".txt")));
+	    	    		
+	    	    	}	
+	    	    	dname=dname.concat("(").concat(s).concat(")");
+	    	    	j=0;
+				}
+				else
+				{
+					fd=new File(path.concat("\\").concat(dname.concat(".txt")));
+				}
+    			System.out.println("New File Name is : "+dname.concat(".txt"));
+    		
+    			fd.createNewFile();
+    			i=0;
+    	
+		PrintWriter pc=new PrintWriter(path.concat("\\").concat(dname.concat(".txt")));
+		BufferedReader Bc=new BufferedReader(new FileReader(path.concat("\\").concat(oname.concat(".txt"))));
+		String line=Bc.readLine();
+		
+		while(line!=null)
+		{
+			pc.println(line);
+			line=Bc.readLine();
+		}
+		pc.close();
+		Bc.close();
+		f2.delete();
+	}
+	else
+	{
+		System.out.println("Sorry The File Name with path you have provided to us does not Exist. Please Check Carefully.");
+	}    	
+    }
+    void merge() throws IOException
+    {
+    	int j=0;
+    	System.out.println("Enter Path Of First File");
+    	String path1=Sc.next();
+    	System.out.println("Enter Name Of First File");
+    	String name1=Sc.next();
+    	File f1=new File(path1.concat("\\").concat(name1).concat(".txt"));
+    	if (f1.exists())
+    	{
+    	 	System.out.println("Enter Path Of Second File");
+        	String path2=Sc.next();
+        	System.out.println("Enter Name Of Second File");
+        	String name2=Sc.next();
+        	File f2=new File(path2.concat("\\").concat(name2).concat(".txt"));
+        	if (f2.exists())
+        	{
+        		System.out.println("Enter Path Of Result File");
+            	String path3=Sc.next();
+            	System.out.println("Enter Name Of Result File");
+            	String name3=Sc.next();
+            	File f3=new File(path3.concat("\\").concat(name3).concat(".txt"));
+            	if (f3.exists())
+            	{
+            		String s="";
+	    			System.out.println(name3.concat(".txt")+"	File Already Exists");
+	    			System.out.println("So we are auto renameing it");	
+	    	    	while (f3.exists())
+	    	    	{
+	    	    		j++;
+	    	    		s=String.valueOf(j);
+	    	    		f3=new File(path3.concat("\\").concat(name3.concat("(").concat(s).concat(")").concat(".txt")));
+	    	    		
+	    	    	}	
+	    	    	name3=name3.concat("(").concat(s).concat(")");
+	    	    	j=0;
+            	}
+            	f3.createNewFile();
+            	System.out.println("New File Name is : "+name3.concat(".txt"));
+            	PrintWriter P=new PrintWriter(path3.concat("\\").concat(name3.concat(".txt")));
+        		BufferedReader B1=new BufferedReader(new FileReader(path1.concat("\\").concat(name1.concat(".txt"))));
+        		BufferedReader B2=new BufferedReader(new FileReader(path2.concat("\\").concat(name2.concat(".txt"))));
+        		
+        		String Line1=B1.readLine();
+        		while(Line1!=null)
+        		{
+        			P.println(Line1);
+        			Line1=B1.readLine();
+        		}
+        		String Line2=B2.readLine();
+        		while(Line2!=null)
+        		{
+        			P.println(Line2);
+        			Line2=B2.readLine();
+        		}
+        		P.close();
+        		B1.close();
+        		B2.close();
+        		System.out.println("Result File "+name3.concat(".txt")+"	Created Sucessfully" ); 
+        	}
+        	else
+        	{
+        		System.out.println("Second File Does Not Exist");
+        	}
+    	}
+    	else
+    	{
+    		System.out.println("Name Of First File Does Not Exist");
+    	}      
+    }
+    void getsize() throws IOException
+    {
+    	System.out.println("Enter File Path Of File");
+    	String path=Sc.next();
+    	System.out.println("Enter File Name");
+    	String name=Sc.next();
+    	File f3=new File(path.concat("\\").concat(name).concat(".txt"));
+    	if (f3.exists())
+    	{
+    		if((f3.length()/1024)<1)
+    		{
+        		System.out.println("Size Of  "+name.concat(".txt")+"  File in bytes is : "+f3.length()+" bytes"+ " & In kb is"+" 0 kb ");
+    		}
+    		else
+    		{
+    			String strDouble = String.format("%.2f",(double)f3.length()/1024);
+    			System.out.println("Size Of  "+name.concat(".txt")+"  File in bytes is : "+f3.length()+" bytes"+ " & In kb is"+strDouble+" kb "); 			
+    		}   	    		
+    	}
+    	else
+    	{
+    		System.out.println("Name Of First File Does Not Exist");
+    	}    	
+    }
+    void other_options() throws IOException 
+    {
+    	int ch=0;
+    	do 
+    	{
+    		System.out.println("Enter Choice");
+        	System.out.println("1) For Copy File ");
+        	System.out.println("2) For Move File");
+        	System.out.println("3) For Merging two Files");
+        	System.out.println("4) For Renameing File");
+        	System.out.println("5) To Get Size Of Pertigular File");
+        	System.out.println("6) For Exit");
+        	ch=Sc.nextInt();
+        	switch (ch)
+        	{
+        	case 1:
+        		copy();
+        		break;
+        	case 2:
+        		move();
+        		break;
+        	case 3:
+        		merge();
+        		break;
+        	case 4:
+        		rename();
+        		break;
+        	case 5:
+        		getsize();
+        		break;
+        	case 6:
+        		System.out.println("Enter 1 to Confirm");
+        		ch=Sc.nextInt();
+        		if (ch==1)
+        		{
+        			ch=198;
+        		}
+        		
+        		else
+        		{
+        			System.out.println("Thanks For Not Exit");
+        		}
+        		break;
+        	default :
+        		System.out.println("Please Provide Valid Input");
+        		break;
+    	}
+    	}while(ch!=198);    	
+    	}
+}
+public class Ass_8 extends Student
+{
+    public static void main(String[] args) throws Exception 
+    {
+        Scanner Sc=new Scanner (System.in);
+        int flag=0;
+        Student S1 = new Student();
+        do 
+        {
+        System.out.println("Enter Choice\n");
+		System.out.println("1)  For Create DataBase(File)");
+		System.out.println("2)  For Check Whether File Is Created Or not");
+		System.out.println("3)  For Enter Data");
+		System.out.println("4)  For Display DataBase");
+		System.out.println("5)  For Delete Records");
+		System.out.println("6)  For Update Records");
+		System.out.println("7)  For Search Records");
+		System.out.println("8)  For Printing Data Of Named File");
+		System.out.println("9)  For Set Path");
+		System.out.println("10) For Exit");
+		System.out.println("11) For Printing the names of files Which you have created");
+		System.out.println("12) For Other Options");
+                flag=Sc.nextInt();
+                switch(flag)
+                {
+                    case 1:
+                    	S1.Create();
+                        break;
+                    case 2:
+                    	S1.check();
+                    	break;
+                    case 3: 
+                    	S1.EnterData();
+                    	break;
+                    case 4:
+                    	S1.PrintFile();
+                        break;
+                    case 5:
+                    	S1.deleteperticular();
+                        break;
+                    case 6:
+                    	S1.update();
+                        break;
+                    case 7:
+                    	S1.search();
+                        break;
+                    case 8:
+                    	S1.OpenAnotherFile();
+                    	break;
+                    case 9:
+                    	S1.SetPath();
+                    	break;
+                    case 10:
+                        System.out.println("Enter 1 To confirm"); 
+                        int temp=Sc.nextInt();
+                        if (temp==1)
+                        {
+                            flag=198;
+                        }
+                        break;
+                    case 11:
+                    	S1.linkedList();
+                    	break;
+                    case 12:
+                    	S1.other_options();
+                    	break;
+                   default :
+                       System.out.println("Plese Provide Valid Input");
+                       break;                       
+                }
+        }
+        while(flag!=198);    
+        Sc.close();
+    }
+}
+
