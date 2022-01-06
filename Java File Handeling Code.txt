@@ -197,57 +197,7 @@ Scanner Sc=new Scanner(System.in);
     	}
     	
     }
-    void delete() throws IOException
-    {
-    	if (f.exists())
-    	{
-    	System.out.println("Do You Want To Take Backup? If yes then Enter 1, Else enter Any Number");
-    	int t=Sc.nextInt();
-    	if (t==1)
-    	{
-    		System.out.println("Enter The name OF the Backup File");
-    		String temp=Sc.next();
-    		File copy=new File(Filepath.concat("\\").concat(temp.concat(".txt")));
-    		copy.createNewFile();
-    		PrintWriter p=new PrintWriter(Filepath.concat("\\").concat(temp.concat(".txt")));
-    		BufferedReader B=new BufferedReader(new FileReader(Filepath.concat("\\").concat(Fname.concat(".txt"))));
-    		String Line=B.readLine();
-    		while(Line!=null)
-    		{
-    			p.println(Line);
-    			Line=B.readLine();			
-    		}
-    		p.flush();
-    		B.close();
-    		p.close();   	
-    		f.delete();
-    		
-                System.out.println("Backup File "+temp.concat(".txt")+"     Created Successfully");
-    		System.out.println(Fname.concat(".txt") +"  File Is Deleted");
-    		Fname=null;
-    	}
-    	else
-    	{
-    	System.out.println("Enter 1 To Delete File");
-    	int temp=Sc.nextInt();
-    	if (temp==1)
-    	{
-    		
-    		f.delete();
-    		System.out.println(Fname.concat(".txt") +"  File Is Deleted");
-    		Fname=null;
-    	}
-    	else
-    	{
-    		System.out.println(Fname.concat(".txt") +"  File Is Not Deleted");
-    	}
-    	}
-    	}
-    	else
-    	{
-    		System.out.println("File not Found For Deletion Process");
-    	}
-    }
+    
     void EnterData() throws IOException
     {
     	if (f.exists())
